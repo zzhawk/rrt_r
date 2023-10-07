@@ -1,5 +1,8 @@
 // Copyright 2023 watson.wang
 
+#ifndef RRT_BASE_HPP_
+#define RRT_BASE_HPP_
+
 #include <memory>
 #include <vector>
 #include <random>
@@ -21,7 +24,7 @@ struct obstacle {
 struct node;
 
 using nodeSharedPtr = std::shared_ptr<node>;
-//using NodeConstSharedPtr = std::shared_ptr<const node>;
+using nodeConstSharedPtr = std::shared_ptr<const node>;
 using nodeWeakPtr = std::weak_ptr<node>;
 
 struct node {
@@ -38,6 +41,7 @@ struct node {
 
 	pos _p{};
 	std::vector<pos> _path{};
+	double cost{};
 	nodeWeakPtr _parent;
 	std::vector<nodeSharedPtr> _childs = std::vector<nodeSharedPtr>();
 };
@@ -48,7 +52,7 @@ class rrtBase {
 public:
 	struct cfg {
 		double pathResolution = 0.5;
-		int max_iter = 500;
+		int maxIter = 1000;
 		double expand_dis = 3.0;
 		double safety = 0.1;
 	};
@@ -74,8 +78,8 @@ public:
 	rrtBase& operator = (rrtBase&&) noexcept = default;
 
 	virtual std::vector<pos> planning() = 0;
-	virtual nodeSharedPtr steer(nodeSharedPtr& fnd, nodeSharedPtr& tnd, double lenth) = 0;
 
+	virtual nodeSharedPtr steer(nodeSharedPtr& fnd, nodeSharedPtr& tnd, double lenth);
 	virtual nodeSharedPtr getRandNode();
 
 	std::vector<nodeSharedPtr> getDebugNodes();
@@ -102,3 +106,5 @@ private:
 	std::ranlux48 _engine{};
 	double _goalSampleRate = 5.0;
 };
+
+#endif  // RRT_BASE_HPP_

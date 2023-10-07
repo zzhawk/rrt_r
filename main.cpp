@@ -3,6 +3,7 @@
 #include <fstream>
 #include "nlohmann/json.hpp"
 #include "rrt.hpp"
+#include "rrt_star.hpp"
 
 using json = nlohmann::json;
 
@@ -26,12 +27,13 @@ int main() {
 	area play; play.max.x = play.max.y = 15.0; play.min.x = play.min.y = 0.0;
 
 	rrt::cfg cfg;
-	cfg.pathResolution = 0.5;
-	cfg.max_iter = 500;
+	cfg.pathResolution = 0.1;
+	cfg.maxIter = 1000;
 	cfg.expand_dis = 3.0;
 	cfg.safety = 0.1;
 
-	std::unique_ptr<rrtBase> r_rrt= std::make_unique<rrt>(start, goal, rand, play, obs, cfg);
+	//std::unique_ptr<rrtBase> r_rrt = std::make_unique<rrt>(start, goal, rand, play, obs, cfg);
+	std::unique_ptr<rrtBase> r_rrt = std::make_unique<rrtStar>(start, goal, rand, play, obs, cfg);
 
 	auto path = r_rrt->planning();
 

@@ -1,5 +1,8 @@
 // Copyright 2023 watson.wang
 
+#ifndef RRT_HPP_
+#define RRT_HPP_
+
 #include "rrt_base.hpp"
 
 class rrt : public rrtBase 
@@ -9,6 +12,5 @@ public:
 		:rrtBase(start, goal, randArea, playArea, obstacles, cfg){}
 
 	std::vector<pos> planning() override;
-	nodeSharedPtr steer(nodeSharedPtr& fnd, nodeSharedPtr& tnd, double lenth) override;
-
 };
+#endif

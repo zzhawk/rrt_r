@@ -5,6 +5,39 @@
 #include <algorithm>
 #include <random>
 
+nodeSharedPtr rrtBase::steer(nodeSharedPtr& fnd, nodeSharedPtr& tnd, double lenth)
+{
+
+	auto d = calDist(fnd->_p, tnd->_p);
+	auto out = std::make_shared<node>(tnd->_p);
+
+	if (d <= _cfg.pathResolution) {
+		//out->_path.push_back(fnd->_p);
+		//out->_path.push_back(tnd->_p);
+		return nullptr;
+	}
+	else {
+
+		if (lenth > d) lenth = d;
+
+		auto theta = calAngle(fnd->_p, tnd->_p);
+		out->_path.push_back(fnd->_p);
+		auto n_expand = std::floor(lenth / _cfg.pathResolution);
+
+		pos t = fnd->_p;
+		for (int i = 1; i < n_expand; ++i) {
+			t.x += _cfg.pathResolution * std::sin(theta);
+			t.y += _cfg.pathResolution * std::cos(theta);
+			out->_path.push_back(t);
+		}
+		out->_p = out->_path.back();
+
+	}
+
+	out->_parent = fnd;
+	fnd->_childs.push_back(out);
+	return out;
+}
 
 
 std::vector<pos> rrtBase::getResult()
