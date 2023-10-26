@@ -1,4 +1,6 @@
 // Copyright 2023 watson.wang
+// https://github.com/zzhawk
+
 
 #ifndef RRT_HPP_
 #define RRT_HPP_

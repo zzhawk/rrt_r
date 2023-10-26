@@ -1,4 +1,5 @@
 // Copyright 2023 watson.wang
+// https://github.com/zzhawk
 
 #include "rrt_base.hpp"
 #include <cmath>
@@ -12,8 +13,6 @@ nodeSharedPtr rrtBase::steer(nodeSharedPtr& fnd, nodeSharedPtr& tnd, double lent
 	auto out = std::make_shared<node>(tnd->_p);
 
 	if (d <= _cfg.pathResolution) {
-		//out->_path.push_back(fnd->_p);
-		//out->_path.push_back(tnd->_p);
 		return nullptr;
 	}
 	else {
@@ -47,7 +46,9 @@ std::vector<pos> rrtBase::getResult()
 	ans.push_back(node.lock()->_p);
 	while (!node.lock()->_parent.expired()){
 		node = node.lock()->_parent;
-		ans.push_back(node.lock()->_p);
+		for (int i = node.lock()->_path.size() - 1; i > -1; --i) {
+			ans.push_back(node.lock()->_path[i]);
+		}
 	}
 
 	return ans;
@@ -88,13 +89,15 @@ nodeSharedPtr rrtBase::getNearestNode(nodeSharedPtr& nd) const
 
 bool rrtBase::isOutsideArea(nodeSharedPtr& nd) const
 {
-	if (nd->_p.x < _playArea.min.x || nd->_p.x > _playArea.max.x ||
-		nd->_p.y < _playArea.min.y || nd->_p.y > _playArea.max.y) {
-		return true;
+	for (auto pth : nd->_path)
+	{
+		if (pth.x < _playArea.min.x || pth.x > _playArea.max.x ||
+			pth.y < _playArea.min.y || pth.y > _playArea.max.y) {
+			return true;
+		}
 	}
-	else {
-		return false;
-	}
+
+	return false;
 }
 
 

@@ -1,4 +1,5 @@
 // Copyright 2023 watson.wang
+// https://github.com/zzhawk
 
 #include "rrt_star.hpp"
 #include <unordered_map>

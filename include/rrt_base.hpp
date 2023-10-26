@@ -1,4 +1,5 @@
 // Copyright 2023 watson.wang
+// https://github.com/zzhawk
 
 #ifndef RRT_BASE_HPP_
 #define RRT_BASE_HPP_
@@ -40,6 +41,7 @@ struct node {
 	node& operator = (node&&) noexcept = default;
 
 	pos _p{};
+	double _t{};
 	std::vector<pos> _path{};
 	double cost{};
 	nodeWeakPtr _parent;
